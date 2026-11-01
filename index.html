@@ -2,149 +2,148 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Squeek Race</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squeek Race | Hamster Arena</title>
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#15152d,#29204b);
-  color:white;
-  text-align:center;
-  padding:25px 15px;
+ margin:0;padding:24px 14px;
+ background:linear-gradient(145deg,#10172d,#30234d);
+ color:#fff;font-family:Arial,sans-serif;text-align:center
 }
-.container{max-width:650px;margin:auto}
-h1{font-size:38px;color:#ffd66b}
-.subtitle{color:#c9c4e5}
+main{max-width:700px;margin:auto}
+h1{font-size:40px;color:#ffd76a;margin-bottom:5px}
+.sub{color:#c2bedb}
 .card{
-  background:#252443;
-  border:1px solid #48436e;
-  border-radius:18px;
-  padding:22px;
-  margin:20px 0;
+ background:#211f3c;border:1px solid #514b76;
+ border-radius:20px;padding:22px;margin:18px 0
 }
 .track{
-  background:#383452;
-  border-radius:12px;
-  padding:15px;
-  margin:15px 0;
-  text-align:left;
+ background:#383451;border-radius:13px;
+ padding:14px;margin:15px 0;text-align:left
 }
 .lane{
-  height:48px;
-  border-bottom:2px dashed #77718e;
-  position:relative;
-  font-size:29px;
+ height:45px;position:relative;
+ border-bottom:2px dashed #827c9d;
+ font-size:29px
 }
-.hamster{
-  position:absolute;
-  left:0;
-  transition:left .15s linear;
-}
+.ham{position:absolute;left:0;transition:left .12s}
 button{
-  border:0;
-  border-radius:12px;
-  padding:14px 25px;
-  background:#ffd66b;
-  color:#29203d;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+ background:#ffd76a;color:#241c38;border:0;
+ border-radius:12px;padding:14px 24px;
+ font-size:16px;font-weight:bold;cursor:pointer
 }
-button:disabled{opacity:.5;cursor:default}
-#result{font-size:20px;margin:18px;color:#ffd66b}
+button:disabled{opacity:.5}
 .stats{display:flex;justify-content:space-around;gap:10px}
-.stat{font-size:14px;color:#c9c4e5}
-.stat strong{display:block;font-size:24px;color:white;margin-top:8px}
-footer{color:#9993b8;font-size:12px;margin-top:30px}
+.stat{color:#aaa4c8;font-size:14px}
+.stat strong{display:block;color:#fff;font-size:27px;margin:8px}
+#result{color:#ffd76a;font-size:21px;min-height:28px;margin:20px}
+.small{font-size:13px;color:#aaa4c8}
+a{color:#ffd76a}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🐹 SQUEEK RACE</h1>
-  <p class="subtitle">A fun hamster racing mini-game</p>
+<main>
+<h1>🐹 SQUEEK RACE</h1>
+<p class="sub">Welcome to the Hamster Arena!</p>
 
-  <div class="card">
-    <h2>🏁 Choose your champion!</h2>
-    <p>Pick your hamster and start the race.</p>
+<div class="card">
+<h2>🏁 The Big Race</h2>
+<p class="sub">Three champions. One winner.</p>
 
-    <div class="track">
-      <div>🐹 Player 1</div>
-      <div class="lane"><span class="hamster" id="ham1">🐹</span></div>
-      <div>🐰 Player 2</div>
-      <div class="lane"><span class="hamster" id="ham2">🐰</span></div>
-      <div>🐼 Player 3</div>
-      <div class="lane"><span class="hamster" id="ham3">🐼</span></div>
-    </div>
-
-    <button id="start" onclick="startRace()">🚀 START RACE</button>
-    <div id="result">Ready to race?</div>
-  </div>
-
-  <div class="card">
-    <h2>📊 Your Statistics</h2>
-    <div class="stats">
-      <div class="stat">Races played<strong id="races">0</strong></div>
-      <div class="stat">Your wins<strong id="wins">0</strong></div>
-    </div>
-  </div>
-
-  <p class="subtitle">Built for the Squeekchain community</p>
-  <footer>Community mini-game • Independent prototype • v1.0</footer>
+<div class="track">
+<div>🐹 Player 1</div>
+<div class="lane"><span class="ham" id="h1">🐹</span></div>
+<div>🐰 Player 2</div>
+<div class="lane"><span class="ham" id="h2">🐰</span></div>
+<div>🐼 Player 3</div>
+<div class="lane"><span class="ham" id="h3">🐼</span></div>
 </div>
 
+<button id="start" onclick="startRace()">🚀 START RACE</button>
+<div id="result">Ready to race?</div>
+</div>
+
+<div class="card">
+<h2>📊 Your Statistics</h2>
+<div class="stats">
+<div class="stat">Races played<strong id="races">0</strong></div>
+<div class="stat">Player 1 wins<strong id="wins">0</strong></div>
+<div class="stat">Best streak<strong id="streak">0</strong></div>
+</div>
+<p class="small">Statistics are saved locally in this browser.</p>
+</div>
+
+<div class="card">
+<h2>🏆 Your Achievements</h2>
+<p id="achievement">Play your first race to begin!</p>
+</div>
+
+<div class="card">
+<h2>🌐 About this project</h2>
+<p>A community-built hamster racing mini-game.</p>
+<p class="small">Independent community prototype. Not an official Squeekchain product.</p>
+<a href="https://github.com/Alibegam/squeek-race" target="_blank">View source on GitHub</a>
+</div>
+
+<p class="small">SQUEEK RACE • VERSION 2.0</p>
+</main>
+
 <script>
-let races = 0;
-let wins = 0;
+const saved = JSON.parse(localStorage.getItem("squeekStats") || "{}");
+let races = saved.races || 0;
+let wins = saved.wins || 0;
+let streak = saved.streak || 0;
 let running = false;
 
-function startRace(){
-  if(running) return;
-  running = true;
-
-  const button = document.getElementById("start");
-  const result = document.getElementById("result");
-  const hamsters = [
-    document.getElementById("ham1"),
-    document.getElementById("ham2"),
-    document.getElementById("ham3")
-  ];
-
-  button.disabled = true;
-  result.textContent = "🏁 The race is on!";
-
-  hamsters.forEach(h => h.style.left = "0%");
-
-  let positions = [0,0,0];
-
-  const race = setInterval(() => {
-    positions = positions.map(p => Math.min(100,p+Math.random()*13+2));
-
-    hamsters.forEach((h,i) => {
-      h.style.left = positions[i] + "%";
-    });
-
-    const winner = positions.findIndex(p => p >= 100);
-
-    if(winner !== -1){
-      clearInterval(race);
-      races++;
-
-      if(winner === 0) wins++;
-
-      document.getElementById("races").textContent = races;
-      document.getElementById("wins").textContent = wins;
-
-      result.textContent =
-        ["🐹 Player 1","🐰 Player 2","🐼 Player 3"][winner]
-        + " wins the race! 🏆";
-
-      button.disabled = false;
-      running = false;
-    }
-  },180);
+function update(){
+ document.getElementById("races").textContent=races;
+ document.getElementById("wins").textContent=wins;
+ document.getElementById("streak").textContent=streak;
+ let text="Play your first race to begin!";
+ if(races>=1) text="🥉 First race completed!";
+ if(races>=5) text="🥈 Racing enthusiast!";
+ if(wins>=5) text="🥇 Hamster champion!";
+ document.getElementById("achievement").textContent=text;
 }
+function save(){
+ localStorage.setItem("squeekStats",JSON.stringify({
+ races,wins,streak
+ }));
+}
+function startRace(){
+ if(running)return;
+ running=true;
+ const button=document.getElementById("start");
+ const result=document.getElementById("result");
+ const hamsters=[
+ document.getElementById("h1"),
+ document.getElementById("h2"),
+ document.getElementById("h3")
+ ];
+ button.disabled=true;
+ result.textContent="🏁 Race in progress!";
+ hamsters.forEach(h=>h.style.left="0%");
+ let positions=[0,0,0];
+ const timer=setInterval(()=>{
+ positions=positions.map(p=>Math.min(100,p+Math.random()*12+3));
+
+ hamsters.forEach((h,i)=>h.style.left=positions[i]+"%");
+ const winner=positions.findIndex(p=>p>=100);
+ if(winner!==-1){
+ clearInterval(timer);
+ races++;
+ if(winner===0){wins++;streak++;}
+ else streak=0;
+ save();
+ update();
+ result.textContent=["🐹 Player 1","🐰 Player 2","🐼 Player 3"][winner]+" wins! 🏆";
+ button.disabled=false;
+ running=false;
+ }
+ },150);
+}
+update();
 </script>
 </body>
-</html>
+</html>                         
