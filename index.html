@@ -40,6 +40,26 @@ button:disabled{opacity:.5}
 #result{color:#ffd76a;font-size:21px;min-height:28px;margin:20px}
 .small{font-size:13px;color:#aaa4c8}
 a{color:#ffd76a}
+.network-grid{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:12px;margin-top:18px
+}
+.network-item{
+ background:#383451;border-radius:12px;padding:14px;
+ color:#aaa4c8;font-size:13px
+}
+.network-item strong{
+ display:block;color:#fff;font-size:20px;
+ margin-top:8px;overflow-wrap:anywhere
+}
+#networkStatus{font-weight:bold;color:#ffd76a}
+@media(max-width:420px){
+ h1{font-size:32px}
+ .card{padding:16px}
+ .network-grid{gap:8px}
+ .network-item{padding:10px}
+ .network-item strong{font-size:17px}
+}
 </style>
 </head>
 <body>
@@ -80,13 +100,66 @@ a{color:#ffd76a}
 </div>
 
 <div class="card">
-<h2>🌐 About this project</h2>
-<p>A community-built hamster racing mini-game.</p>
-<p class="small">Independent community prototype. Not an official Squeekchain product.</p>
-<a href="https://github.com/Alibegam/squeek-race" target="_blank">View source on GitHub</a>
+<h2>🌐 Live Squeekchain Status</h2>
+<p class="sub">Public read-only network data</p>
+<p id="networkStatus">⏳ Connecting to API...</p>
+
+<div class="network-grid">
+<div class="network-item">
+Network freshness
+<strong id="freshness">--</strong>
+</div>
+<div class="network-item">
+Hardware status
+<strong id="coreStatus">--</strong>
+</div>
+<div class="network-item">
+Device speed
+<strong id="speed">--</strong>
+</div>
+<div class="network-item">
+Device RPM
+<strong id="rpm">--</strong>
+</div>
+<div class="network-item">
+Block height
+<strong id="blockHeight">--</strong>
+</div>
+<div class="network-item">
+Oracle
+<strong id="oracle">--</strong>
+</div>
+<div class="network-item">
+Settlement queue
+<strong id="queue">--</strong>
+</div>
+<div class="network-item">
+Builder status
+<strong id="builder">--</strong>
+</div>
 </div>
 
-<p class="small">SQUEEK RACE • VERSION 2.0</p>
+<p class="small" id="lastUpdated">
+Waiting for first update...
+</p>
+<p class="small">
+Network readings come from Squeekchain hardware infrastructure.
+They are not measurements of the game characters.
+</p>
+</div>
+
+<div class="card">
+<h2>🌐 About this project</h2>
+<p>A community-built hamster racing mini-game.</p>
+<p class="small">
+Independent community prototype. Not an official Squeekchain product.
+</p>
+<a href="https://github.com/Alibegam/squeek-race" target="_blank" rel="noopener">
+View source on GitHub
+</a>
+</div>
+
+<p class="small">SQUEEK RACE • VERSION 3.0</p>
 </main>
 
 <script>
@@ -97,53 +170,151 @@ let streak = saved.streak || 0;
 let running = false;
 
 function update(){
- document.getElementById("races").textContent=races;
- document.getElementById("wins").textContent=wins;
- document.getElementById("streak").textContent=streak;
- let text="Play your first race to begin!";
- if(races>=1) text="🥉 First race completed!";
- if(races>=5) text="🥈 Racing enthusiast!";
- if(wins>=5) text="🥇 Hamster champion!";
- document.getElementById("achievement").textContent=text;
+ document.getElementById("races").textContent = races;
+ document.getElementById("wins").textContent = wins;
+ document.getElementById("streak").textContent = streak;
+
+ let text = "Play your first race to begin!";
+ if(races >= 1) text = "🥉 First race completed!";
+ if(races >= 5) text = "🥈 Racing enthusiast!";
+ if(wins >= 5) text = "🥇 Hamster champion!";
+
+ document.getElementById("achievement").textContent = text;
 }
+
 function save(){
- localStorage.setItem("squeekStats",JSON.stringify({
- races,wins,streak
+ localStorage.setItem("squeekStats", JSON.stringify({
+  races, wins, streak
  }));
 }
-function startRace(){
- if(running)return;
- running=true;
- const button=document.getElementById("start");
- const result=document.getElementById("result");
- const hamsters=[
- document.getElementById("h1"),
- document.getElementById("h2"),
- document.getElementById("h3")
- ];
- button.disabled=true;
- result.textContent="🏁 Race in progress!";
- hamsters.forEach(h=>h.style.left="0%");
- let positions=[0,0,0];
- const timer=setInterval(()=>{
- positions=positions.map(p=>Math.min(100,p+Math.random()*12+3));
 
- hamsters.forEach((h,i)=>h.style.left=positions[i]+"%");
- const winner=positions.findIndex(p=>p>=100);
- if(winner!==-1){
- clearInterval(timer);
- races++;
- if(winner===0){wins++;streak++;}
- else streak=0;
- save();
- update();
- result.textContent=["🐹 Player 1","🐰 Player 2","🐼 Player 3"][winner]+" wins! 🏆";
- button.disabled=false;
- running=false;
- }
+function startRace(){
+ if(running) return;
+
+ running = true;
+ const button = document.getElementById("start");
+ const result = document.getElementById("result");
+
+ const hamsters = [
+  document.getElementById("h1"),
+  document.getElementById("h2"),
+  document.getElementById("h3")
+ ];
+
+ button.disabled = true;
+ result.textContent = "🏁 Race in progress!";
+ hamsters.forEach(h => h.style.left = "0%");
+
+ let positions = [0,0,0];
+
+ const timer = setInterval(() => {
+  positions = positions.map(
+   p => Math.min(100, p + Math.random()*12 + 3)
+  );
+
+  hamsters.forEach((h,i) => {
+   h.style.left = positions[i] + "%";
+  });
+
+  const winner = positions.findIndex(p => p >= 100);
+
+  if(winner !== -1){
+   clearInterval(timer);
+   races++;
+
+   if(winner === 0){
+    wins++;
+    streak++;
+   } else {
+    streak = 0;
+   }
+
+   save();
+   update();
+
+   result.textContent =
+    ["🐹 Player 1","🐰 Player 2","🐼 Player 3"][winner]
+    + " wins! 🏆";
+
+   button.disabled = false;
+   running = false;
+  }
  },150);
 }
+
+async function loadNetworkStatus(){
+ const status = document.getElementById("networkStatus");
+
+ try{
+  const response = await fetch(
+   "https://api.squeekchain.com/v1/status",
+   {cache:"no-store"}
+  );
+
+  if(!response.ok){
+   throw new Error("HTTP " + response.status);
+  }
+
+  const data = await response.json();
+  const m = data.measurement || {};
+  const b = data.builder || {};
+  const o = data.oracle || {};
+  const q = data.settlementQueue || {};
+
+  document.getElementById("freshness").textContent =
+   m.freshness || "Unknown";
+
+  document.getElementById("coreStatus").textContent =
+   m.coreStatus || "Unknown";
+
+  document.getElementById("speed").textContent =
+   typeof m.speedMmPerSecond === "number"
+    ? (m.speedMmPerSecond / 1000).toFixed(3) + " m/s"
+    : "--";
+
+  document.getElementById("rpm").textContent =
+   typeof m.rpmMilli === "number"
+    ? (m.rpmMilli / 1000).toFixed(3)
+    : "--";
+
+  document.getElementById("blockHeight").textContent =
+   b.anchor && b.anchor.blockHeight
+    ? Number(b.anchor.blockHeight).toLocaleString()
+    : "--";
+
+  document.getElementById("oracle").textContent =
+   o.state || "Unknown";
+
+  document.getElementById("queue").textContent =
+   q.state || "Unknown";
+
+  document.getElementById("builder").textContent =
+   b.status || "Unknown";
+
+  const online = m.freshness === "online";
+
+  status.textContent = online
+   ? "🟢 Connected — Live API data received"
+   : "🟡 API connected — measurement is not online";
+
+  const observed = m.observedAt
+   ? new Date(m.observedAt).toLocaleString()
+   : "Unknown";
+
+  document.getElementById("lastUpdated").textContent =
+   "Last measurement: " + observed;
+
+ }catch(error){
+  status.textContent = "🔴 Unable to load network data";
+  document.getElementById("lastUpdated").textContent =
+   "Please check your connection. The game still works normally.";
+  console.error("Squeekchain API error:", error);
+ }
+}
+
 update();
+loadNetworkStatus();
+setInterval(loadNetworkStatus,30000);
 </script>
 </body>
-</html>                         
+</html> 
